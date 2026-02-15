@@ -27,4 +27,27 @@ void AMyHanaDanCharacter::BeginPlay()
 	{
 		HealthComponent->InitializeStatus(CharacterStatus);
 	}
+	HealthComponent->OnDeath.AddDynamic(this, &AMyHanaDanCharacter::OnCharacterDeath);
+}
+
+float AMyHanaDanCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	if (!HasAuthority())return 0;
+	// 将来的にダメージを受けたときにいろんな処理追加する
+
+	HealthComponent->ApplyDamage(DamageAmount);
+
+	return DamageAmount;
+}
+
+void AMyHanaDanCharacter::OnCharacterDeath()
+{
+	UKismetSystemLibrary::PrintString(this, TEXT("死亡！"), true, true, FColor::Red, 3.0f);
+	// ラグドール化させてから一定時間後に死亡処理
+	// 死亡処理はGameModeに任せる
+	// MyGameModeを作ってその中でPlayerが死んだ処理を書く
+	// 継承したGameModeでリスポーンさせるのか観戦にさせるのか決めさせる
+
+	// 今回はテストでとりあえずHP回復させちゃう
+	HealthComponent->Heal(500);
 }

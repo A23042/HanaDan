@@ -65,6 +65,8 @@ void AMyHanaDanPlayerController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	if (!HealthUIClass)return;
+	if (!IsLocalController())return;
+
 	// HPのUIを表示してバインド
 	HealthUI = CreateWidget<UHealthUI>(this, HealthUIClass);
 	if (HealthUI)

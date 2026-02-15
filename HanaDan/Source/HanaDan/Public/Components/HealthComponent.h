@@ -9,6 +9,7 @@
 class UCharacterStatusDataAsset;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHealthDelegate, float, LifePercent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class HANADAN_API UHealthComponent : public UActorComponent
@@ -23,6 +24,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -33,19 +36,36 @@ public:
 	/// <param name="StatusData">ステータスのデータアセット</param>
 	void InitializeStatus(const UCharacterStatusDataAsset* StatusData);
 
-	// HPの更新
+	/// <summary>
+	/// ダメージを受ける処理
+	/// </summary>
+	/// <param name="DamageAmount">ダメージ量</param>
 	UFUNCTION()
-	void UpdateHelth(int32 Value);
+	void ApplyDamage(int32 DamageAmount);
+	/// <summary>
+	/// 回復処理
+	/// </summary>
+	/// <param name="HealAmount">回復量</param>
+	UFUNCTION()
+	void Heal(int32 HealAmount);
 
 public:
 	// HP更新のデリゲート
 	UPROPERTY()
 	FHealthDelegate OnHealthUpdate;
+	// 死亡時のデリゲート
+	UPROPERTY()
+	FOnDeath OnDeath;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 MaxHP = 100;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, ReplicatedUsing = "OnRep_currentHP")
 	int32 currentHP;
+	UFUNCTION()
+	void OnRep_currentHP();
+
+	UPROPERTY(Replicated)
+	bool bIsDeath = false;
 };

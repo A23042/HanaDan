@@ -4,6 +4,7 @@
 #include "Components/HealthComponent.h"
 #include "Data/CharacterStatusDataAsset.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -25,6 +26,13 @@ void UHealthComponent::BeginPlay()
 	
 }
 
+void UHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UHealthComponent, currentHP);
+	DOREPLIFETIME(UHealthComponent, bIsDeath);
+}
 
 // Called every frame
 void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -43,8 +51,26 @@ void UHealthComponent::InitializeStatus(const UCharacterStatusDataAsset* StatusD
 	UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("最大体力:%d"), MaxHP), true, true, FColor::Blue, 5.0f);
 }
 
-void UHealthComponent::UpdateHelth(int32 Value)
+void UHealthComponent::ApplyDamage(int32 DamageAount)
 {
-	OnHealthUpdate.Broadcast(currentHP / MaxHP);
+	if (!GetOwner()->HasAuthority()) return;
+	currentHP = FMath::Clamp(currentHP - DamageAount, 0, MaxHP);
+	if (currentHP <= 0)
+	{
+		OnDeath.Broadcast();
+	}
+	OnRep_currentHP();
+}
+
+void UHealthComponent::Heal(int32 HealAmount)
+{
+	if (!GetOwner()->HasAuthority()) return;
+	currentHP = FMath::Clamp(currentHP + HealAmount, 0, MaxHP);
+	OnRep_currentHP();
+}
+
+void UHealthComponent::OnRep_currentHP()
+{
+	OnHealthUpdate.Broadcast((float)currentHP / (float)MaxHP);
 }
 

@@ -30,6 +30,11 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	
+	// 死亡処理を書く
+	UFUNCTION()
+	void OnCharacterDeath();
 public:
 	UHealthComponent* GetHealthComponent()const { return HealthComponent; }
 };
