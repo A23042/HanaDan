@@ -5,7 +5,7 @@ root = true
 
 # Visual C++ コード スタイルの設定
 
-cpp_generate_documentation_comments = doxygen_triple_slash
+cpp_generate_documentation_comments = xml
 
 [*]
 charset = utf-8

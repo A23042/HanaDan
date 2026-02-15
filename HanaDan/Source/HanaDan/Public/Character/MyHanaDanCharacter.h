@@ -7,6 +7,7 @@
 #include "MyHanaDanCharacter.generated.h"
 
 class UHealthComponent;
+class UCharacterStatusDataAsset;
 
 /**
  * 
@@ -18,6 +19,10 @@ class HANADAN_API AMyHanaDanCharacter : public AHanaDanCharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UHealthComponent* HealthComponent;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Status")
+	TObjectPtr<UCharacterStatusDataAsset> CharacterStatus;
 
 public:
 	AMyHanaDanCharacter();

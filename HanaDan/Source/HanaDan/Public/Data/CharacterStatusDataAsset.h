@@ -9,14 +9,14 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class HANADAN_API UCharacterStatusDataAsset : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 	
 public:
 
-	// �ő�̗�
+	// 最大体力
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 MaxHP = 100.0f;
+	int32 MaxHP = 100;
 };

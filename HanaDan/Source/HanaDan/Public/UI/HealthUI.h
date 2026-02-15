@@ -23,9 +23,17 @@ protected:
 	UProgressBar* HealthBar;
 
 public:
+	/// <summary>
+	/// デリゲートのバインド初期化
+	/// </summary>
+	/// <param name="HealthComponent">バインドするHealthComopnent</param>
 	void InitializeBind(UHealthComponent* HealthComponent);
 
 protected:
+	/// <summary>
+	/// デリゲート発火されたときに呼び出されるHPバーの更新
+	/// </summary>
+	/// <param name="Percent">0～1のHP％</param>
 	UFUNCTION()
 	void UpdateHealthBar(float Percent);
 };

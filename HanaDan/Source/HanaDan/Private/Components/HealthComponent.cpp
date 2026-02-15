@@ -2,6 +2,8 @@
 
 
 #include "Components/HealthComponent.h"
+#include "Data/CharacterStatusDataAsset.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -30,6 +32,15 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UHealthComponent::InitializeStatus(const UCharacterStatusDataAsset* StatusData)
+{
+	if (!StatusData)return;
+	// 最大体力の設定
+	MaxHP = StatusData->MaxHP;
+	currentHP = MaxHP;
+	UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("最大体力:%d"), MaxHP), true, true, FColor::Blue, 5.0f);
 }
 
 void UHealthComponent::UpdateHelth(int32 Value)

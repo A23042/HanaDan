@@ -12,6 +12,7 @@
 #include "HanaDan.h"
 #include "Components/HealthComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Data/CharacterStatusDataAsset.h"
 
 AMyHanaDanCharacter::AMyHanaDanCharacter()
 {
@@ -21,4 +22,9 @@ AMyHanaDanCharacter::AMyHanaDanCharacter()
 void AMyHanaDanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (CharacterStatus)
+	{
+		HealthComponent->InitializeStatus(CharacterStatus);
+	}
 }

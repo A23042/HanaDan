@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
+class UCharacterStatusDataAsset;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHealthDelegate, float, LifePercent);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -25,11 +27,19 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	/// <summary>
+	/// ステータスの初期化
+	/// </summary>
+	/// <param name="StatusData">ステータスのデータアセット</param>
+	void InitializeStatus(const UCharacterStatusDataAsset* StatusData);
+
+	// HPの更新
 	UFUNCTION()
 	void UpdateHelth(int32 Value);
 
 public:
-	UPROPERTY(BlueprintAssignable)
+	// HP更新のデリゲート
+	UPROPERTY()
 	FHealthDelegate OnHealthUpdate;
 
 protected:
