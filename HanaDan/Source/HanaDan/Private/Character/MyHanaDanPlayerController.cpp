@@ -6,9 +6,11 @@
 #include "Engine/LocalPlayer.h"
 #include "InputMappingContext.h"
 #include "HanaDanCameraManager.h"
-#include "UI/HealthUI.h"
 #include "Widgets/Input/SVirtualJoystick.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 #include "Character/MyHanaDanCharacter.h"
+#include "UI/HealthUI.h"
 
 AMyHanaDanPlayerController::AMyHanaDanPlayerController()
 {
@@ -30,6 +32,17 @@ void AMyHanaDanPlayerController::BeginPlay()
 			MobileControlsWidget->AddToPlayerScreen(0);
 
 		}
+	}
+
+	if (!HealthUIClass)return;
+	if (!IsLocalController())return;
+
+	// HPのUIを表示してバインド
+	HealthUI = CreateWidget<UHealthUI>(this, HealthUIClass);
+	if (HealthUI)
+	{
+		HealthUI->AddToViewport();
+		HealthUI->InitializeBind(Cast<AMyHanaDanCharacter>(GetPawn())->GetHealthComponent());
 	}
 }
 
@@ -63,17 +76,6 @@ void AMyHanaDanPlayerController::SetupInputComponent()
 void AMyHanaDanPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
-	if (!HealthUIClass)return;
-	if (!IsLocalController())return;
-
-	// HPのUIを表示してバインド
-	HealthUI = CreateWidget<UHealthUI>(this, HealthUIClass);
-	if (HealthUI)
-	{
-		HealthUI->AddToViewport();
-		HealthUI->InitializeBind(Cast<AMyHanaDanCharacter>(GetPawn())->GetHealthComponent());
-	}
 }
 
 bool AMyHanaDanPlayerController::ShouldUseTouchControls() const

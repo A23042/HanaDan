@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "UI/HealthUI.h"
@@ -14,6 +14,5 @@ void UHealthUI::InitializeBind(UHealthComponent* HealthComponent)
 
 void UHealthUI::UpdateHealthBar(float Percent)
 {
-	UKismetSystemLibrary::PrintString(this, TEXT("HP更新"));
 	HealthBar->SetPercent(Percent);
 }

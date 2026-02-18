@@ -49,6 +49,8 @@ public:
 	UFUNCTION()
 	void Heal(int32 HealAmount);
 
+	bool IsDeath()const { return bIsDeath; }
+
 public:
 	// HP更新のデリゲート
 	UPROPERTY()

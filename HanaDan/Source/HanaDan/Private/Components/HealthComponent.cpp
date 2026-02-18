@@ -48,7 +48,6 @@ void UHealthComponent::InitializeStatus(const UCharacterStatusDataAsset* StatusD
 	// 最大体力の設定
 	MaxHP = StatusData->MaxHP;
 	currentHP = MaxHP;
-	UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("最大体力:%d"), MaxHP), true, true, FColor::Blue, 5.0f);
 }
 
 void UHealthComponent::ApplyDamage(int32 DamageAount)
